@@ -38,11 +38,7 @@ function App() {
             } />
             
             {/* Category Routes */}
-            <Route path="/:category" element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
+            <Route path="/:category" element={<Dashboard />} />
             
             {/* Fallback to project-planning */}
             <Route path="*" element={<Navigate to="/project-planning" replace />} />
