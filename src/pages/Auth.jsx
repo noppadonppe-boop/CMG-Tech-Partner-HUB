@@ -6,12 +6,12 @@ const Auth = () => {
   const [view, setView] = useState('login'); // 'login', 'register', 'forgotPassword'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
+
   // Registration fields
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [position, setPosition] = useState('');
-  
+
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -84,7 +84,7 @@ const Auth = () => {
 
   return (
     <div className="flex min-h-screen bg-white font-inter">
-      
+
       {/* Left Column: Branding and Information */}
       <div className="hidden lg:flex lg:w-1/2 bg-[#0f172a] text-white relative overflow-hidden flex-col justify-between p-12">
         {/* Background Glows */}
@@ -97,7 +97,7 @@ const Auth = () => {
             <span className="material-symbols-outlined text-[20px]">layers</span>
           </div>
           <div>
-            <h1 className="font-bold text-lg leading-tight tracking-wide">CMG</h1>
+            <h1 className="font-bold text-lg leading-tight tracking-wide">Partner</h1>
             <p className="text-[10px] text-white/60 tracking-widest uppercase">Tech Partner Hub</p>
           </div>
         </div>
@@ -105,20 +105,20 @@ const Auth = () => {
         {/* Main Content */}
         <div className="relative z-10 mt-12 mb-auto flex-1 flex flex-col justify-center">
           <h2 className="text-4xl lg:text-[44px] font-bold leading-[1.2] mb-2 tracking-tight">
-            ระบบจัดการศูนย์รวม<br/>
+            ระบบจัดการศูนย์รวม<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f97316] to-[#fb923c]">
               Tech Partner HUB
             </span>
           </h2>
-          
+
           <p className="text-white/70 text-sm mt-6 max-w-md leading-relaxed">
-            Construction Management Group<br/>
-            บริหารจัดการข้อมูลระบบสารสนเทศ และแพลตฟอร์มการทำงาน<br/>
+            Construction Management Group<br />
+            บริหารจัดการข้อมูลระบบสารสนเทศ และแพลตฟอร์มการทำงาน<br />
             อย่างมีประสิทธิภาพ โปร่งใส และตรวจสอบได้
           </p>
 
           <div className="mt-12 flex flex-col gap-8">
-            
+
             {/* Feature 1 */}
             <div className="flex gap-4 items-start">
               <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
@@ -157,14 +157,14 @@ const Auth = () => {
 
         {/* Footer */}
         <div className="relative z-10 text-[11px] text-white/30">
-          © 2026 CMG · All rights reserved
+          © 2026  · All rights reserved
         </div>
       </div>
 
       {/* Right Column: Login Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 relative overflow-y-auto max-h-screen custom-scrollbar">
         <div className="w-full max-w-[400px] py-8">
-          
+
           <div className="mb-8 text-center lg:text-left">
             <h2 className="text-2xl font-bold text-[#1e293b] mb-2 flex items-center justify-center lg:justify-start gap-2">
               {view === 'login' && <>ยินดีต้อนรับ 👋</>}
@@ -194,7 +194,7 @@ const Auth = () => {
 
           {view !== 'forgotPassword' && (
             <>
-              <button 
+              <button
                 type="button"
                 onClick={handleGoogleLogin}
                 disabled={loading}
@@ -213,14 +213,14 @@ const Auth = () => {
           )}
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            
+
             {view === 'register' && (
               <>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-slate-700">ชื่อ</label>
-                  <input 
-                    type="text" 
-                    required 
+                  <input
+                    type="text"
+                    required
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300"
@@ -229,9 +229,9 @@ const Auth = () => {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-slate-700">นามสกุล</label>
-                  <input 
-                    type="text" 
-                    required 
+                  <input
+                    type="text"
+                    required
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300"
@@ -240,9 +240,9 @@ const Auth = () => {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-slate-700">ตำแหน่งงาน (Position)</label>
-                  <input 
-                    type="text" 
-                    required 
+                  <input
+                    type="text"
+                    required
                     value={position}
                     onChange={(e) => setPosition(e.target.value)}
                     className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300"
@@ -254,9 +254,9 @@ const Auth = () => {
 
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-semibold text-slate-700">Email</label>
-              <input 
-                type="email" 
-                required 
+              <input
+                type="email"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/20 focus:border-[#3b82f6] transition-all duration-300"
@@ -268,15 +268,15 @@ const Auth = () => {
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-slate-700">Password / รหัสผ่าน</label>
                 <div className="relative">
-                  <input 
-                    type={showPassword ? "text" : "password"} 
-                    required 
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full bg-white border border-slate-200 rounded-xl pl-4 pr-10 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3b82f6]/20 focus:border-[#3b82f6] transition-all duration-300 tracking-wider"
                     placeholder="••••••••"
                   />
-                  <button 
+                  <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
@@ -291,8 +291,8 @@ const Auth = () => {
 
             {view === 'login' && (
               <div className="flex justify-end mt-[-8px]">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   onClick={() => { setView('forgotPassword'); setError(''); setMessage(''); }}
                   className="text-xs text-[#3b82f6] hover:text-[#2563eb] font-medium transition-colors"
                 >
@@ -301,8 +301,8 @@ const Auth = () => {
               </div>
             )}
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={loading}
               className="w-full bg-[#2563eb] text-white py-2.5 rounded-xl font-semibold text-sm tracking-wide shadow-sm hover:bg-[#1d4ed8] transition-all duration-300 disabled:opacity-70 disabled:pointer-events-none mt-2 flex items-center justify-center gap-2"
             >
@@ -330,10 +330,10 @@ const Auth = () => {
               </p>
             )}
           </div>
-          
+
           <div className="mt-6 text-center">
-            <button 
-              onClick={() => navigate('/')} 
+            <button
+              onClick={() => navigate('/')}
               className="inline-flex items-center gap-1 text-xs font-medium text-slate-400 hover:text-slate-600 transition-colors"
             >
               <span className="material-symbols-outlined text-[14px]">arrow_back</span>

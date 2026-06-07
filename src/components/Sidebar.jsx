@@ -43,7 +43,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         <div className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity" onClick={onClose} />
       )}
       <aside className={`fixed left-0 top-0 h-screen w-[280px] bg-white/20 backdrop-blur-md shadow-lg z-50 border-r border-white/30 flex flex-col select-none transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
-        
+
         {/* Brand Header */}
         <div className="px-6 py-6 mb-2 flex items-center gap-3">
           <div className="w-8 h-8 bg-primary rounded flex items-center justify-center text-on-primary font-bold shadow-sm">C</div>
@@ -128,7 +128,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
         {/* Copyright */}
         <div className={`${isMasterAdmin ? '' : 'mt-auto'} text-[10px] text-on-surface/40 text-center mt-4 pb-4`}>
-          © 2026 CMG Engineering & Construction
+          © 2026 information
         </div>
 
       </aside>
