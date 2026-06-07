@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en" style="">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Technology Partner Hub - Dashboard</title>
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Tailwind Config from Guidelines -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#3c4a42",
+                        "on-surface": "#0b1c30",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface": "#f8f9ff",
+                        "on-background": "#0b1c30",
+                        "background": "#f8f9ff",
+                        "inverse-primary": "#4edea3",
+                        "surface-container-high": "#dce9ff",
+                        "surface-variant": "#d3e4fe",
+                        "inverse-surface": "#213145",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#dae2fd",
+                        "on-tertiary-container": "#00367a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#131b2e",
+                        "on-primary-fixed-variant": "#005236",
+                        "tertiary": "#005ac2",
+                        "on-primary-fixed": "#002113",
+                        "outline-variant": "#bbcabf",
+                        "on-secondary-container": "#5c647a",
+                        "surface-bright": "#f8f9ff",
+                        "outline": "#6c7a71",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "surface-container": "#e5eeff",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#10b981",
+                        "error-container": "#ffdad6",
+                        "primary": "#006c49",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#4edea3",
+                        "tertiary-fixed": "#d8e2ff",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "surface-container-low": "#eff4ff",
+                        "secondary": "#565e74",
+                        "on-primary-container": "#00422b",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "tertiary-container": "#71a1ff",
+                        "surface-tint": "#006c49",
+                        "secondary-fixed": "#dae2fd",
+                        "primary-fixed": "#6ffbbe",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-tertiary-fixed": "#001a42",
+                        "surface-dim": "#cbdbf5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "2rem",
+                        "margin-mobile": "1rem",
+                        "stack-sm": "0.5rem",
+                        "gutter": "1.5rem",
+                        "stack-lg": "2rem",
+                        "container-max": "1440px",
+                        "stack-md": "1rem"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter", "sans-serif"],
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "headline-lg-mobile": ["Inter", "sans-serif"],
+                        "label-md": ["Inter", "sans-serif"],
+                        "headline-xl": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "label-sm": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        /* Custom scrollbar for sidebar */
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #3f465c;
+            border-radius: 4px;
+        }
+
+        /* Subtle glow effect for active sidebar item */
+        .power-bar-active {
+            box-shadow: -2px 0 10px rgba(16, 185, 129, 0.5);
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        data-snapdom="injected-import">
+</head>
+
+<body
+    class="bg-background text-on-background font-body-lg antialiased selection:bg-primary-container selection:text-on-primary-container flex min-h-screen">
+    <!-- Shared Component: SideNavBar -->
+    <aside
+        class="fixed left-0 top-0 h-screen w-[280px] bg-on-background dark:bg-inverse-surface shadow-lg z-40 border-r border-outline-variant/20 flex flex-col py-stack-lg">
+        <!-- Brand Header -->
+        <div class="px-6 mb-8 flex items-center gap-3">
+            <div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-on-primary font-bold">
+                C
+            </div>
+            <div>
+                <h1 class="font-headline-md text-headline-md font-bold text-surface-container-lowest tracking-tight">CMG
+                    HUB</h1>
+                <p class="font-label-sm text-label-sm text-secondary-fixed-dim/70 uppercase tracking-wider">Tech Partner
+                </p>
+            </div>
+        </div>
+        <!-- Navigation Tabs -->
+        <nav class="flex-1 overflow-y-auto sidebar-scroll flex flex-col gap-1 px-2"><!-- Information -->
+            <div class="flex flex-col gap-1">
+                <a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim/70 hover:bg-white/5 hover:text-white transition-colors duration-200 rounded-lg mx-2 font-label-md text-label-md group"
+                    href="#">
+                    <span
+                        class="material-symbols-outlined text-[20px] group-hover:text-primary-fixed-dim transition-colors"
+                        data-icon="info">info</span>
+                    Information
+                </a>
+                <div class="ml-10 flex flex-col gap-1 mb-2">
+                    <a class="text-label-sm text-secondary-fixed-dim/40 hover:text-primary-fixed-dim py-1 transition-colors"
+                        href="#">Contact Us</a>
+                    <a class="text-label-sm text-secondary-fixed-dim/40 hover:text-primary-fixed-dim py-1 transition-colors"
+                        href="#">Project Reference</a>
+                </div>
+            </div>
+
+            <!-- Technology -->
+            <div class="flex flex-col gap-1">
+                <a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim/70 hover:bg-white/5 hover:text-white transition-colors duration-200 rounded-lg mx-2 font-label-md text-label-md group"
+                    href="#">
+                    <span
+                        class="material-symbols-outlined text-[20px] group-hover:text-primary-fixed-dim transition-colors"
+                        data-icon="memory">memory</span>
+                    Technology
+                </a>
+                <div class="ml-10 flex flex-col gap-1 mb-2">
+                    <a class="text-label-sm text-secondary-fixed-dim/40 hover:text-primary-fixed-dim py-1 transition-colors"
+                        href="#">Power Plant</a>
+                    <a class="text-label-sm text-secondary-fixed-dim/40 hover:text-primary-fixed-dim py-1 transition-colors"
+                        href="#">Clean Energy</a>
+                </div>
+            </div>
+
+            <!-- Project Planning (Active) -->
+            <div class="flex flex-col gap-1">
+                <a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary-fixed-dim border-l-4 border-primary-container power-bar-active rounded-r-lg mx-2 font-label-md text-label-md"
+                    href="#">
+                    <span class="material-symbols-outlined text-[20px]" data-icon="event_note" data-weight="fill"
+                        style="font-variation-settings: 'FILL' 1;">event_note</span>
+                    Project Planning
+                </a>
+                <div class="ml-10 flex flex-col gap-1 mb-2">
+                    <a class="text-label-sm text-primary-fixed-dim py-1 transition-colors" href="#">Project Cost
+                        Estimate</a>
+                </div>
+            </div>
+
+            <!-- Project Control -->
+            <div class="flex flex-col gap-1">
+                <a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim/70 hover:bg-white/5 hover:text-white transition-colors duration-200 rounded-lg mx-2 font-label-md text-label-md group"
+                    href="#">
+                    <span
+                        class="material-symbols-outlined text-[20px] group-hover:text-primary-fixed-dim transition-colors"
+                        data-icon="precision_manufacturing">precision_manufacturing</span>
+                    Project Control
+                </a>
+                <div class="ml-10 flex flex-col gap-1 mb-2">
+                    <a class="text-label-sm text-secondary-fixed-dim/40 hover:text-primary-fixed-dim py-1 transition-colors"
+                        href="#">Smart Schedule</a>
+                </div>
+            </div>
+
+            <!-- Engineering -->
+            <div class="flex flex-col gap-1">
+                <a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim/70 hover:bg-white/5 hover:text-white transition-colors duration-200 rounded-lg mx-2 font-label-md text-label-md group"
+                    href="#">
+                    <span
+                        class="material-symbols-outlined text-[20px] group-hover:text-primary-fixed-dim transition-colors"
+                        data-icon="architecture">architecture</span>
+                    Engineering
+                </a>
+                <div class="ml-10 flex flex-col gap-1 mb-2">
+                    <a class="text-label-sm text-secondary-fixed-dim/40 hover:text-primary-fixed-dim py-1 transition-colors"
+                        href="#">Smart Sugar</a>
+                </div>
+            </div>
+        </nav>
+        <!-- CTA & Footer Tabs -->
+        <div class="mt-auto px-4 pt-4 border-t border-white/10">
+            <button
+                class="w-full flex items-center justify-center gap-2 bg-tertiary text-on-tertiary py-2.5 rounded-lg font-label-md text-label-md hover:bg-tertiary/90 transition-colors mb-4 shadow-md">
+                <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+                Admin Panel
+            </button>
+            <a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim/70 hover:bg-white/5 hover:text-white transition-colors duration-200 rounded-lg font-label-md text-label-md group"
+                href="#">
+                <span class="material-symbols-outlined text-[20px] group-hover:text-primary-fixed-dim transition-colors"
+                    data-icon="settings">settings</span>
+                Settings
+            </a>
+            <div class="text-[10px] text-secondary-fixed-dim/40 text-center mt-2 pb-2">
+                © 2026 CMG Engineering &amp; Construction
+            </div>
+        </div>
+    </aside>
+    <!-- Main Wrapper -->
+    <div class="flex-1 flex flex-col ml-[280px] min-h-screen bg-surface">
+        <!-- Shared Component: TopAppBar -->
+        <header
+            class="sticky top-0 right-0 w-full z-30 bg-surface dark:bg-background border-b border-outline-variant/30 flex justify-between items-center h-16 px-gutter backdrop-blur-md bg-opacity-90">
+            <!-- Contextual Breadcrumb/Title -->
+            <div class="flex items-center gap-3">
+                <button
+                    class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center w-8 h-8 rounded-full hover:bg-surface-container-highest">
+                    <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                </button>
+                <h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">Project Planning</h2>
+            </div>
+            <!-- Actions (Search & Profile) -->
+            <div class="flex items-center gap-6">
+                <!-- Search -->
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span
+                            class="material-symbols-outlined text-[18px] text-on-surface-variant group-focus-within:text-primary transition-colors">search</span>
+                    </div>
+                    <input
+                        class="block w-64 pl-10 pr-3 py-2 border border-outline-variant/50 rounded-full leading-5 bg-surface-container-lowest text-on-surface placeholder-on-surface-variant/60 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-all duration-300 focus:w-72 shadow-sm font-body-md text-body-md"
+                        placeholder="Search systems..." type="text">
+                </div>
+                <!-- Trailing Icons -->
+                <div class="flex items-center gap-2">
+                    <button
+                        class="text-on-surface-variant hover:text-primary transition-colors w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-highest relative">
+                        <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+                        <span
+                            class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+                    </button>
+                    <button
+                        class="text-on-surface-variant hover:text-primary transition-colors w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-highest">
+                        <span class="material-symbols-outlined" data-icon="apps">apps</span>
+                    </button>
+                </div>
+                <!-- Profile -->
+                <div class="flex items-center gap-3 pl-4 border-l border-outline-variant/30 cursor-pointer group">
+                    <div class="text-right hidden md:block">
+                        <p
+                            class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">
+                            Noppadon Pinitphol</p>
+                        <p class="font-label-sm text-label-sm text-on-surface-variant">SuperAdmin</p>
+                    </div>
+                    <img alt="Noppadon Pinitphol"
+                        class="h-9 w-9 rounded-full object-cover border-2 border-surface-container ring-1 ring-outline-variant/20"
+                        data-alt="A professional headshot of an Asian male executive in a modern office environment, soft natural lighting, high resolution, corporate aesthetic."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDRze21wMmydpiYesr6-FYsNUEaJN1z4NjKNop_z6kMkBAiXFjQixYIxVTbDmIkst6p_jaBdNP5iqlJclq7-TjYn0eyc8TPK2O4NKg6Zlck5wV_EpLCKTp9FrlrCn4lz_CKwCgTdQaeg43ukh06NTdm20-zZi4Wm8fjnWZOz_uULTu0s8UVOYNBtq-mgc1gRzkRLBhi5VStLId4K7rWhXsSn2CjOgm64k3IQe0DAlVpmZe_7l442mr2rwk4hGyX0iyVMmeQ7hHSz0">
+                    <span
+                        class="material-symbols-outlined text-[18px] text-on-surface-variant group-hover:text-primary transition-colors">logout</span>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content Area -->
+        <main class="flex-1 p-gutter max-w-container-max mx-auto w-full">
+            <div class="mb-8">
+                <p class="font-body-md text-body-md text-secondary max-w-2xl">Access core project management modules.
+                    Select a system below to configure tracking, milestones, and daily operations.</p>
+            </div>
+            <!-- Bento Grid of System Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Card 1: Budget Control System -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-6 border border-outline-variant/20 shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative group flex flex-col cursor-pointer">
+                    <!-- Status Indicator -->
+                    <div class="absolute top-4 left-4">
+                        <span
+                            class="material-symbols-outlined text-[16px] text-primary bg-primary/10 rounded-full p-0.5">check_circle</span>
+                    </div>
+                    <div
+                        class="absolute top-4 right-4 text-on-surface-variant/40 group-hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+                    </div>
+                    <div
+                        class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-5 mt-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-[28px]" data-weight="fill"
+                            style="font-variation-settings: 'FILL' 1;">request_quote</span>
+                    </div>
+                    <div class="text-center flex-1 flex flex-col">
+                        <h3 class="font-headline-md text-headline-md text-on-surface mb-1">Budget Control System</h3>
+                        <p class="font-label-sm text-label-sm text-secondary mb-6 flex-1">ระบบติดตามงบประมาณโครงการ</p>
+                        <div
+                            class="inline-flex items-center justify-center gap-1 text-primary font-label-md text-label-md group-hover:gap-2 transition-all mx-auto">
+                            เข้าใช้งาน <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2: Mile Stone Progress -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-6 border border-outline-variant/20 shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative group flex flex-col cursor-pointer">
+                    <div class="absolute top-4 left-4">
+                        <span
+                            class="material-symbols-outlined text-[16px] text-primary bg-primary/10 rounded-full p-0.5">check_circle</span>
+                    </div>
+                    <div
+                        class="absolute top-4 right-4 text-on-surface-variant/40 group-hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+                    </div>
+                    <div
+                        class="w-12 h-12 rounded-lg bg-[#8b5cf6]/10 text-[#8b5cf6] flex items-center justify-center mb-5 mt-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-[28px]" data-weight="fill"
+                            style="font-variation-settings: 'FILL' 1;">flag</span>
+                    </div>
+                    <div class="text-center flex-1 flex flex-col">
+                        <h3 class="font-headline-md text-headline-md text-on-surface mb-1">Mile Stone Progress</h3>
+                        <p class="font-label-sm text-label-sm text-secondary mb-6 flex-1">การติดตามงานแบบ Project Mile
+                            Stone</p>
+                        <div
+                            class="inline-flex items-center justify-center gap-1 text-primary font-label-md text-label-md group-hover:gap-2 transition-all mx-auto">
+                            เข้าใช้งาน <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3: CMG Payment System -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-6 border border-outline-variant/20 shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative group flex flex-col cursor-pointer">
+                    <div class="absolute top-4 left-4">
+                        <span
+                            class="material-symbols-outlined text-[16px] text-primary bg-primary/10 rounded-full p-0.5">check_circle</span>
+                    </div>
+                    <div
+                        class="absolute top-4 right-4 text-on-surface-variant/40 group-hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+                    </div>
+                    <div
+                        class="w-12 h-12 rounded-lg bg-[#3b82f6]/10 text-[#3b82f6] flex items-center justify-center mb-5 mt-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-[28px]" data-weight="fill"
+                            style="font-variation-settings: 'FILL' 1;">credit_card</span>
+                    </div>
+                    <div class="text-center flex-1 flex flex-col">
+                        <h3 class="font-headline-md text-headline-md text-on-surface mb-1">CMG Payment System</h3>
+                        <p class="font-label-sm text-label-sm text-secondary mb-6 flex-1">ระบบชำระเงินและการจ่ายเงิน</p>
+                        <div
+                            class="inline-flex items-center justify-center gap-1 text-primary font-label-md text-label-md group-hover:gap-2 transition-all mx-auto">
+                            เข้าใช้งาน <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 4: Project Planning-Organize -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-6 border border-outline-variant/20 shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative group flex flex-col cursor-pointer">
+                    <div class="absolute top-4 left-4">
+                        <span
+                            class="material-symbols-outlined text-[16px] text-primary bg-primary/10 rounded-full p-0.5">check_circle</span>
+                    </div>
+                    <div
+                        class="absolute top-4 right-4 text-on-surface-variant/40 group-hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+                    </div>
+                    <div
+                        class="w-12 h-12 rounded-lg bg-[#f59e0b]/10 text-[#f59e0b] flex items-center justify-center mb-5 mt-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-[28px]" data-weight="fill"
+                            style="font-variation-settings: 'FILL' 1;">folder</span>
+                    </div>
+                    <div class="text-center flex-1 flex flex-col">
+                        <h3 class="font-headline-md text-headline-md text-on-surface mb-1">Project Planning-Organize
+                        </h3>
+                        <p class="font-label-sm text-label-sm text-secondary mb-6 flex-1">
+                            จัดระเบียบและบริหารแผนงานโครงการ</p>
+                        <div
+                            class="inline-flex items-center justify-center gap-1 text-primary font-label-md text-label-md group-hover:gap-2 transition-all mx-auto">
+                            เข้าใช้งาน <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 5: CMG Project Planer -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-6 border border-outline-variant/20 shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative group flex flex-col cursor-pointer">
+                    <div class="absolute top-4 left-4">
+                        <span
+                            class="material-symbols-outlined text-[16px] text-primary bg-primary/10 rounded-full p-0.5">check_circle</span>
+                    </div>
+                    <div
+                        class="absolute top-4 right-4 text-on-surface-variant/40 group-hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+                    </div>
+                    <div
+                        class="w-12 h-12 rounded-lg bg-tertiary-container text-on-tertiary-container flex items-center justify-center mb-5 mt-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-[28px]" data-weight="fill"
+                            style="font-variation-settings: 'FILL' 1;">monitoring</span>
+                    </div>
+                    <div class="text-center flex-1 flex flex-col">
+                        <h3 class="font-headline-md text-headline-md text-on-surface mb-1">CMG Project Planer</h3>
+                        <p class="font-label-sm text-label-sm text-secondary mb-6 flex-1">วางแผนโครงการ</p>
+                        <div
+                            class="inline-flex items-center justify-center gap-1 text-primary font-label-md text-label-md group-hover:gap-2 transition-all mx-auto">
+                            เข้าใช้งาน <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 6: CMG-Scaffold -->
+                <div
+                    class="bg-surface-container-lowest rounded-xl p-6 border border-outline-variant/20 shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative group flex flex-col cursor-pointer">
+                    <div class="absolute top-4 left-4">
+                        <span
+                            class="material-symbols-outlined text-[16px] text-primary bg-primary/10 rounded-full p-0.5">check_circle</span>
+                    </div>
+                    <div
+                        class="absolute top-4 right-4 text-on-surface-variant/40 group-hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+                    </div>
+                    <div
+                        class="w-12 h-12 rounded-lg bg-surface-container-high text-on-surface flex items-center justify-center mb-5 mt-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-[28px]" data-weight="fill"
+                            style="font-variation-settings: 'FILL' 1;">architecture</span>
+                    </div>
+                    <div class="text-center flex-1 flex flex-col">
+                        <h3 class="font-headline-md text-headline-md text-on-surface mb-1">CMG-Scaffold</h3>
+                        <p class="font-label-sm text-label-sm text-secondary mb-6 flex-1">โครงสร้างพื้นฐานสำเร็จรูป</p>
+                        <div
+                            class="inline-flex items-center justify-center gap-1 text-primary font-label-md text-label-md group-hover:gap-2 transition-all mx-auto">
+                            เข้าใช้งาน <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Global Overlay Indication (Num Lock On simulation from screenshot) -->
+            <div class="fixed bottom-10 left-1/2 transform -translate-x-1/2 ml-[140px] bg-surface-container-lowest/90 backdrop-blur-sm border border-outline-variant/30 shadow-lg rounded-xl px-8 py-6 flex flex-col items-center justify-center pointer-events-none transition-opacity duration-500 opacity-0"
+                id="num-lock-toast">
+                <span class="material-symbols-outlined text-[32px] text-on-surface mb-2">lock</span>
+                <span class="font-label-md text-label-md text-on-surface">Num Lock On</span>
+            </div>
+        </main>
+    </div>
+    <!-- Micro-interaction Script -->
+    <script>
+        // Simulate a system toast fading in and out (like the Num Lock indicator in screenshots)
+        document.addEventListener('DOMContentLoaded', () => {
+            const toast = document.getElementById('num-lock-toast');
+            if (toast) {
+                setTimeout(() => {
+                    toast.classList.remove('opacity-0');
+                    setTimeout(() => {
+                        toast.classList.add('opacity-0');
+                    }, 3000);
+                }, 1000);
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>
