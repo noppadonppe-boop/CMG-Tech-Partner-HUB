@@ -21,12 +21,12 @@ function App() {
             {/* Pending Route */}
             <Route path="/pending" element={<PendingApproval />} />
 
-            {/* Default to project-planning */}
-            <Route path="/" element={<Navigate to="/project-planning" replace />} />
+            {/* Default to information */}
+            <Route path="/" element={<Navigate to="/information" replace />} />
             
             {/* Admin Route - Protected */}
             <Route path="/master-admin/manage-cards" element={
-              <ProtectedRoute>
+              <ProtectedRoute requireRoles={['MasterAdmin']}>
                 <ManageCards />
               </ProtectedRoute>
             } />
@@ -40,8 +40,8 @@ function App() {
             {/* Category Routes */}
             <Route path="/:category" element={<Dashboard />} />
             
-            {/* Fallback to project-planning */}
-            <Route path="*" element={<Navigate to="/project-planning" replace />} />
+            {/* Fallback to information */}
+            <Route path="*" element={<Navigate to="/information" replace />} />
           </Routes>
         </Router>
       </CardProvider>

@@ -70,7 +70,7 @@ const Dashboard = () => {
                 
                 {/* Background Image for this slide */}
                 <div 
-                  className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+                  className="absolute inset-0 z-0 bg-[length:100%_100%] bg-no-repeat"
                   style={{ backgroundImage: `url("${catData.image}")` }}
                 >
                   {/* Very subtle gradient overlay just to ensure header text readability */}

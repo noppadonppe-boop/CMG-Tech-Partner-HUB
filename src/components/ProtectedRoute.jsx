@@ -18,12 +18,8 @@ const ProtectedRoute = ({ children, requireApproved = true, requireRoles = [] })
   }
 
   if (!userData) {
-    // Current user exists but profile is missing/still loading
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <span className="material-symbols-outlined animate-spin text-[40px] text-primary">progress_activity</span>
-      </div>
-    );
+    // Current user exists but profile is missing. Redirect to auth.
+    return <Navigate to="/auth" replace />;
   }
 
   if (requireApproved) {

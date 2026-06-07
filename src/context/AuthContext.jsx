@@ -175,7 +175,7 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={value}>
       {/* Expose children even if user Profile is still fetching, let ProtectedRoute handle spinners */}
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

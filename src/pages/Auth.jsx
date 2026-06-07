@@ -23,12 +23,12 @@ const Auth = () => {
   // If already logged in and profile loaded, redirect based on status
   useEffect(() => {
     if (currentUser && userData) {
-      if (userData.status === 'pending') {
-        navigate('/pending');
-      } else if (userData.status === 'approved') {
-        navigate('/');
-      } else if (userData.status === 'rejected') {
+      if (userData.status?.toLowerCase() === 'pending') {
+        navigate('/pending', { replace: true });
+      } else if (userData.status?.toLowerCase() === 'rejected') {
         setError('บัญชีของคุณถูกระงับการใช้งาน');
+      } else {
+        navigate('/information', { replace: true });
       }
     }
   }, [currentUser, userData, navigate]);
