@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Dashboard from './pages/Dashboard';
 import ManageCards from './pages/ManageCards';
 import ManageUsers from './pages/ManageUsers';
+import ManageSidebar from './pages/ManageSidebar';
 import Auth from './pages/Auth';
 import PendingApproval from './pages/PendingApproval';
 import { CardProvider } from './context/CardContext';
@@ -34,6 +35,12 @@ function App() {
             <Route path="/master-admin/manage-users" element={
               <ProtectedRoute requireRoles={['MasterAdmin']}>
                 <ManageUsers />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/master-admin/manage-sidebar" element={
+              <ProtectedRoute requireRoles={['MasterAdmin']}>
+                <ManageSidebar />
               </ProtectedRoute>
             } />
             

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useCards } from '../context/CardContext';
 import { db } from '../firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
@@ -8,7 +9,9 @@ const Sidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
   const pathname = location.pathname;
   const { currentUser, userData } = useAuth();
+  const { sidebarMenus } = useCards();
   const [pendingCount, setPendingCount] = useState(0);
+  const [expandedMenus, setExpandedMenus] = useState({});
 
   const isActive = (path) => {
     if (path === '/project-planning') {
@@ -29,20 +32,34 @@ const Sidebar = ({ isOpen, onClose }) => {
     }
   }, [isMasterAdmin]);
 
-  const navItems = [
-    { path: '/information', label: 'Information', icon: 'info', color: '#0ea5e9' },
-    { path: '/technology', label: 'Technology', icon: 'memory', color: '#8b5cf6' },
-    { path: '/project-planning', label: 'Project Planning', icon: 'event_note', color: '#f59e0b' },
-    { path: '/project-control', label: 'Project Control', icon: 'precision_manufacturing', color: '#ec4899' },
-    { path: '/engineering', label: 'Engineering', icon: 'architecture', color: '#10b981' }
-  ];
+  // Expand parent menu if active pathname matches a submenu
+  useEffect(() => {
+    const activeSub = sidebarMenus.find(m => m.type === 'sub' && isActive(m.path));
+    if (activeSub && activeSub.parentId) {
+      setExpandedMenus(prev => ({
+        ...prev,
+        [activeSub.parentId]: true
+      }));
+    }
+  }, [pathname, sidebarMenus]);
+
+  const toggleExpand = (menuId) => {
+    setExpandedMenus(prev => ({
+      ...prev,
+      [menuId]: !prev[menuId]
+    }));
+  };
+
+  const isEmojiStr = (str) => /[\p{Emoji_Presentation}\p{Extended_Pictographic}]/u.test(str || '');
+
+  const mainMenus = sidebarMenus.filter(m => m.type === 'main' || !m.type);
 
   return (
     <>
       {isOpen && (
         <div className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity" onClick={onClose} />
       )}
-      <aside className={`fixed left-0 top-0 h-screen w-[280px] bg-white/20 backdrop-blur-md shadow-lg z-50 border-r border-white/30 flex flex-col select-none transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+      <aside className={`fixed left-0 top-0 h-screen w-[280px] bg-white/20 backdrop-blur-md shadow-lg z-50 border-r border-r-white/30 flex flex-col select-none transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
 
         {/* Brand Header */}
         <div className="px-6 py-6 mb-2 flex items-center gap-3">
@@ -78,19 +95,122 @@ const Sidebar = ({ isOpen, onClose }) => {
 
         {/* Main Navigation */}
         <nav className="flex-1 overflow-y-auto sidebar-scroll flex flex-col gap-1.5 px-2">
-          {navItems.map((item) => {
+          {mainMenus.map((item) => {
+            const submenus = sidebarMenus.filter(m => m.parentId === item.id && m.type === 'sub');
+            const hasSubs = submenus.length > 0;
+            const isExpanded = !!expandedMenus[item.id];
+            
+            // Active state checks
+            const isParentActive = isActive(item.path) || submenus.some(sub => isActive(sub.path));
+            const activeColor = item.color || '#0ea5e9';
+
+            if (hasSubs) {
+              return (
+                <div key={item.id} className="flex flex-col gap-1">
+                  {/* Expandable parent header */}
+                  <button
+                    onClick={() => toggleExpand(item.id)}
+                    className={`flex items-center justify-between px-4 py-3 rounded-lg mx-2 font-label-md text-label-md transition-all duration-300 group ${
+                      isParentActive 
+                        ? 'bg-white/40 shadow-sm font-semibold border-l-[3px]' 
+                        : 'text-on-surface/70 hover:bg-white/30'
+                    }`}
+                    style={{ 
+                      borderColor: isParentActive ? activeColor : 'transparent', 
+                      color: isParentActive ? activeColor : undefined,
+                      '--hover-color': activeColor 
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span 
+                        className={`${isEmojiStr(item.icon) ? '' : 'material-symbols-outlined'} text-[20px] transition-colors duration-300 ${
+                          isParentActive ? '' : 'text-on-surface/50 group-hover:text-[color:var(--hover-color)]'
+                        }`} 
+                        style={{ color: isParentActive ? activeColor : undefined }}
+                      >
+                        {item.icon || 'folder'}
+                      </span>
+                      <span className={`${isParentActive ? '' : 'group-hover:text-[color:var(--hover-color)] transition-colors'}`}>
+                        {item.label}
+                      </span>
+                    </div>
+                    <span 
+                      className={`material-symbols-outlined text-[18px] transition-transform duration-300 ${
+                        isExpanded ? 'rotate-180' : ''
+                      }`}
+                      style={{ color: isParentActive ? activeColor : 'inherit' }}
+                    >
+                      expand_more
+                    </span>
+                  </button>
+
+                  {/* Submenus list */}
+                  {isExpanded && (
+                    <div className="flex flex-col gap-1 pl-4 ml-2 border-l border-white/20">
+                      {submenus.map((sub) => {
+                        const subActive = isActive(sub.path);
+                        const subColor = sub.color || activeColor;
+                        return (
+                          <Link
+                            key={sub.path}
+                            to={sub.path}
+                            className={`flex items-center gap-2.5 px-4 py-2 rounded-lg font-label-md text-label-sm transition-all duration-300 group ${
+                              subActive 
+                                ? 'bg-white/30 font-semibold border-l-[2px]' 
+                                : 'text-on-surface/60 hover:bg-white/20'
+                            }`}
+                            style={{ 
+                              borderColor: subActive ? subColor : 'transparent', 
+                              color: subActive ? subColor : undefined,
+                              '--hover-color': subColor 
+                            }}
+                          >
+                            <span 
+                              className={`${isEmojiStr(sub.icon) ? '' : 'material-symbols-outlined'} text-[16px] transition-colors duration-300 ${
+                                subActive ? '' : 'text-on-surface/40 group-hover:text-[color:var(--hover-color)]'
+                              }`}
+                              style={{ color: subActive ? subColor : undefined }}
+                            >
+                              {sub.icon || 'folder'}
+                            </span>
+                            <span className={`${subActive ? '' : 'group-hover:text-[color:var(--hover-color)] transition-colors'}`}>
+                              {sub.label}
+                            </span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            // Normal menu item without submenus
             const active = isActive(item.path);
             return (
               <Link
                 key={item.path}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg mx-2 font-label-md text-label-md transition-all duration-300 group ${active ? 'bg-white/40 shadow-sm font-semibold border-l-[3px]' : 'text-on-surface/70 hover:bg-white/30'}`}
-                style={{ borderColor: active ? item.color : 'transparent', color: active ? item.color : undefined, '--hover-color': item.color }}
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg mx-2 font-label-md text-label-md transition-all duration-300 group ${
+                  active ? 'bg-white/40 shadow-sm font-semibold border-l-[3px]' : 'text-on-surface/70 hover:bg-white/30'
+                }`}
+                style={{ 
+                  borderColor: active ? activeColor : 'transparent', 
+                  color: active ? activeColor : undefined, 
+                  '--hover-color': activeColor 
+                }}
                 to={item.path}
               >
-                <span className={`material-symbols-outlined text-[20px] transition-colors duration-300 ${active ? '' : 'text-on-surface/50 group-hover:text-[color:var(--hover-color)]'}`} style={{ color: active ? item.color : undefined }}>
-                  {item.icon}
+                <span 
+                  className={`${isEmojiStr(item.icon) ? '' : 'material-symbols-outlined'} text-[20px] transition-colors duration-300 ${
+                    active ? '' : 'text-on-surface/50 group-hover:text-[color:var(--hover-color)]'
+                  }`} 
+                  style={{ color: active ? activeColor : undefined }}
+                >
+                  {item.icon || 'folder'}
                 </span>
-                <span className={`${active ? '' : 'group-hover:text-[color:var(--hover-color)] transition-colors'}`}>{item.label}</span>
+                <span className={`${active ? '' : 'group-hover:text-[color:var(--hover-color)] transition-colors'}`}>
+                  {item.label}
+                </span>
               </Link>
             );
           })}
@@ -122,6 +242,13 @@ const Sidebar = ({ isOpen, onClose }) => {
             >
               <span className={`material-symbols-outlined text-[20px] transition-colors duration-300 ${isActive('/master-admin/manage-cards') ? 'text-primary' : 'group-hover:text-primary text-on-surface/50'}`}>dashboard_customize</span>
               จัดการการ์ดเมนู
+            </Link>
+            <Link
+              to="/master-admin/manage-sidebar"
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-lg mx-2 font-label-md text-label-md transition-all duration-300 group ${isActive('/master-admin/manage-sidebar') ? 'bg-white/40 text-primary border-l-[3px] border-primary shadow-sm font-semibold' : 'text-on-surface/70 hover:bg-white/30 hover:text-on-surface'}`}
+            >
+              <span className={`material-symbols-outlined text-[20px] transition-colors duration-300 ${isActive('/master-admin/manage-sidebar') ? 'text-primary' : 'group-hover:text-primary text-on-surface/50'}`}>view_sidebar</span>
+              จัดการ Sidebar
             </Link>
           </div>
         )}

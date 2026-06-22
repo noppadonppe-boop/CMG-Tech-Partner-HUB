@@ -1,16 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import TopAppBar from '../components/TopAppBar';
 import { useCards } from '../context/CardContext';
-
-// --- Configuration Data ---
-const CATEGORIES = [
-  { id: 'information', label: 'Information', icon: 'info' },
-  { id: 'technology', label: 'Technology', icon: 'memory' },
-  { id: 'project-planning', label: 'Project Planning', icon: 'event_note' },
-  { id: 'project-control', label: 'Project Control', icon: 'precision_manufacturing' },
-  { id: 'engineering', label: 'Engineering', icon: 'architecture' }
-];
 
 const COLOR_PALETTE = [
   '#3b82f6', '#0ea5e9', '#06b6d4', '#14b8a6', '#10b981', '#22c55e', '#84cc16', 
@@ -18,13 +9,17 @@ const COLOR_PALETTE = [
   '#a855f7', '#8b5cf6', '#6366f1', '#4f46e5', '#475569', '#334155'
 ];
 
-
-
 const ManageCards = () => {
-  const { cards, addCard, updateCard, deleteCard } = useCards();
+  const { cards, addCard, updateCard, deleteCard, sidebarMenus } = useCards();
 
   // State
-  const [activeCategory, setActiveCategory] = useState(CATEGORIES[0].id);
+  const [activeCategory, setActiveCategory] = useState('');
+
+  useEffect(() => {
+    if (sidebarMenus.length > 0 && !activeCategory) {
+      setActiveCategory(sidebarMenus[0].id);
+    }
+  }, [sidebarMenus, activeCategory]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCard, setEditingCard] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -71,14 +66,14 @@ const ManageCards = () => {
   // Derived Data
   const categoryCounts = useMemo(() => {
     const counts = {};
-    CATEGORIES.forEach(c => { counts[c.id] = 0; });
+    sidebarMenus.forEach(c => { counts[c.id] = 0; });
     cards.forEach(card => {
       if (counts[card.category] !== undefined) {
         counts[card.category]++;
       }
     });
     return counts;
-  }, [cards]);
+  }, [cards, sidebarMenus]);
 
   const filteredCards = cards.filter(card => card.category === activeCategory);
 
@@ -160,7 +155,7 @@ const ManageCards = () => {
     updateCard(card.id, { isActive: !card.isActive });
   };
 
-  const activeCategoryLabel = CATEGORIES.find(c => c.id === activeCategory)?.label || '';
+  const activeCategoryLabel = sidebarMenus.find(c => c.id === activeCategory)?.label || '';
 
   return (
     <div className="flex min-h-screen font-inter bg-surface selection:bg-primary-container selection:text-on-primary-container">
@@ -189,8 +184,9 @@ const ManageCards = () => {
 
           {/* Tabs Navigation */}
           <div className="border-b border-outline-variant/30 flex overflow-x-auto mb-6 custom-scrollbar">
-            {CATEGORIES.map(cat => {
+            {sidebarMenus.map(cat => {
               const isActive = activeCategory === cat.id;
+              const isEmojiStr = (str) => /[\p{Emoji_Presentation}\p{Extended_Pictographic}]/u.test(str || '');
               return (
                 <button
                   key={cat.id}
@@ -201,8 +197,12 @@ const ManageCards = () => {
                       : 'border-transparent text-secondary hover:text-on-surface hover:border-outline-variant/50'
                   }`}
                 >
-                  <span className={`material-symbols-outlined text-[18px] ${isActive ? 'text-primary' : 'text-secondary/70'}`}>
-                    {cat.icon}
+                  <span 
+                    className={`${isEmojiStr(cat.icon) ? '' : 'material-symbols-outlined'} text-[18px] ${
+                      isActive ? 'text-primary' : 'text-secondary/70'
+                    }`}
+                  >
+                    {cat.icon || 'folder'}
                   </span>
                   {cat.label}
                   <span className={`ml-1.5 px-2 py-0.5 rounded-full text-[11px] font-bold ${

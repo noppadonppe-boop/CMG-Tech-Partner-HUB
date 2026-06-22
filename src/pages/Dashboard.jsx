@@ -1,28 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import TopAppBar from '../components/TopAppBar';
 import SystemCard from '../components/SystemCard';
 import { useCards } from '../context/CardContext';
 
-const categoriesData = [
-  { id: 'information', title: 'Information', image: '/information.png' },
-  { id: 'technology', title: 'Technology', image: '/Technology.png' },
-  { id: 'project-planning', title: 'Project Planning', image: '/Project Planing.png' },
-  { id: 'project-control', title: 'Project Control', image: '/Project Control.png' },
-  { id: 'engineering', title: 'Engineering', image: '/Engineering.png' }
-];
-
-const categoryTitles = categoriesData.reduce((acc, cur) => ({...acc, [cur.id]: cur.title}), {});
+const defaultImages = {
+  'information': '/information.png',
+  'technology': '/Technology.png',
+  'project-planning': '/Project Planing.png',
+  'project-control': '/Project Control.png',
+  'engineering': '/Engineering.png'
+};
 
 const Dashboard = () => {
   const { category } = useParams();
-  const { cards } = useCards();
+  const { cards, sidebarMenus, loading } = useCards();
   const [showToast, setShowToast] = useState(false);
   const [viewMode, setViewMode] = useState('grid');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // Compute categoriesData dynamically from sidebarMenus
+  const categoriesData = useMemo(() => {
+    return sidebarMenus.map(menu => ({
+      id: menu.id,
+      title: menu.label,
+      image: defaultImages[menu.id] || ''
+    }));
+  }, [sidebarMenus]);
+
+  const categoryTitles = useMemo(() => {
+    return categoriesData.reduce((acc, cur) => ({ ...acc, [cur.id]: cur.title }), {});
+  }, [categoriesData]);
+
   useEffect(() => {
+    if (!category || !categoryTitles[category]) return;
+    
     // Simulate a system toast fading in and out on mount
     const timer1 = setTimeout(() => {
       setShowToast(true);
@@ -36,15 +49,28 @@ const Dashboard = () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
     };
-  }, [category]); // Re-trigger on category change
+  }, [category, categoryTitles]);
 
-  // If the category route is invalid, redirect to project-planning
-  if (!category || !categoryTitles[category]) {
-    return <Navigate to="/project-planning" replace />;
+  if (loading || sidebarMenus.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-secondary font-medium">กำลังโหลดข้อมูล...</p>
+        </div>
+      </div>
+    );
   }
 
   const activeIndex = categoriesData.findIndex(c => c.id === category);
+
+  // If the category route is invalid, redirect to the first available category
+  if (activeIndex === -1) {
+    return <Navigate to={`/${categoriesData[0].id}`} replace />;
+  }
+
   const pageTitle = categoryTitles[category];
+  const totalSlides = categoriesData.length;
 
   return (
     <div className="flex min-h-screen font-inter selection:bg-primary-container selection:text-on-primary-container overflow-hidden bg-background relative w-full">
@@ -60,18 +86,29 @@ const Dashboard = () => {
 
         {/* Sliding Container */}
         <div 
-          className="absolute inset-0 flex w-[500%] transition-transform duration-700 ease-in-out z-10"
-          style={{ transform: `translateX(-${activeIndex * 20}%)` }}
+          className="absolute inset-0 flex transition-transform duration-700 ease-in-out z-10"
+          style={{ 
+            width: `${totalSlides * 100}%`,
+            transform: `translateX(-${activeIndex * (100 / totalSlides)}%)` 
+          }}
         >
           {categoriesData.map((catData) => {
             const catCards = cards.filter(card => card.category === catData.id);
             return (
-              <div key={catData.id} className="w-1/5 h-full relative">
+              <div 
+                key={catData.id} 
+                style={{ width: `${100 / totalSlides}%` }} 
+                className="h-full relative shrink-0"
+              >
                 
-                {/* Background Image for this slide */}
+                {/* Background Image/Gradient for this slide */}
                 <div 
-                  className="absolute inset-0 z-0 bg-[length:100%_100%] bg-no-repeat"
-                  style={{ backgroundImage: `url("${catData.image}")` }}
+                  className="absolute inset-0 z-0 bg-cover bg-center"
+                  style={
+                    catData.image 
+                      ? { backgroundImage: `url("${catData.image}")` } 
+                      : { backgroundImage: 'linear-gradient(135deg, #f8f9ff 0%, #cbdbf5 100%)' }
+                  }
                 >
                   {/* Very subtle gradient overlay just to ensure header text readability */}
                   <div className="absolute inset-0 bg-gradient-to-b from-surface/50 via-surface/10 to-transparent pointer-events-none"></div>
